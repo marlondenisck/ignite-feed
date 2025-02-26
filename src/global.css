@@ -8,7 +8,10 @@
   --gray-800: #202024;
   --gray-900: #121214;
   
+  --green-300: #00B37E;
   --green-500: #00875f;
+
+  --red-500: #F75A68;
 }
 
 * {
@@ -25,4 +28,9 @@ body {
 
 body, input, textarea, button {
   font: 400 1rem 'Roboto', sans-serif;
+}
+
+:focus {
+  outline: transparent;
+  box-shadow: 0 0 0 2px var(--green-500);
 }
