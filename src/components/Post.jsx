@@ -1,6 +1,7 @@
 import { format, formatDistanceToNow } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
 import { useState } from 'react';
+import PropTypes from 'prop-types';
 
 import { Avatar } from './Avatar';
 import { Comment } from './Comment';
@@ -28,11 +29,16 @@ export function Post({ author, publishedAt, content }) {
     event.preventDefault()
 
     setComments([...comments, newCommentText]);
-    setNewCommentText('');
   }
-
+  
   function handleNewCommentChange() {
     setNewCommentText(event.target.value);
+  }
+
+  function deleteComment(commentToDelete) {
+    console.log(`Deletar comentário ${commentToDelete}`)
+    const newComments = comments.filter(comment => comment !== commentToDelete);
+    setComments(newComments);
   }
 
   return (
@@ -63,6 +69,7 @@ export function Post({ author, publishedAt, content }) {
        })}
         
       </div>
+
       <form onSubmit={handleCrateNewComment} className={styles.commentForm}>
         <strong>Deixe seu feedback</strong>
 
@@ -79,11 +86,30 @@ export function Post({ author, publishedAt, content }) {
       </form>
 
       <div className={styles.commentList}>
-      {comments.map(comment => {
-          return <Comment key={comment} content={comment} />
-        })}
+        {comments.map(comment => {
+            return <Comment 
+              key={comment} 
+              content={comment}
+              onDeleteComment={deleteComment}
+            />
+          })}
       </div>
       
     </article>
   )
 }
+
+Post.propTypes = {
+  author: PropTypes.shape({
+    avatarUrl: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    role: PropTypes.string.isRequired,
+  }).isRequired,
+  publishedAt: PropTypes.instanceOf(Date).isRequired,
+  content: PropTypes.arrayOf(
+    PropTypes.shape({
+      type: PropTypes.string.isRequired,
+      content: PropTypes.string.isRequired,
+    })
+  ).isRequired,
+};
